@@ -1,5 +1,6 @@
 # This smaller action (only r-release, only macOS) is scheduled to run daily
 on:
+  push:
   schedule:
   # Run at midnight everyday
     - cron:  '5 15 * * 0'
