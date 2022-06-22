@@ -73,6 +73,11 @@ set_cols_first(metadata_of_LFI, c("table_no", "series_id"))
 metadata_on_disk <- data.table()
 if (file.exists("metadata.tsv")) {
   metadata_on_disk <- fread("metadata.tsv", sep = "\t")
+  for (j in seq_along(metadata_on_disk)) {
+    if (inherits(v <- .subset2(metadata_on_disk, j), "IDate")) {
+      set(metadata_on_disk, j = j, value = as.Date(v))
+    }
+  }
 }
 fwrite(unique(rbind(metadata_of_LFI, metadata_on_disk, use.names = TRUE)),
        "metadata.tsv", 
