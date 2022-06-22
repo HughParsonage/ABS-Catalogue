@@ -22,3 +22,8 @@ jobs:
       - name: Update
         run: source("update.R")
         shell: Rscript {0}
+      - name: Commit and push new files
+        run: |
+          git config --global user.name 'Hugh Parsonage'
+          git config --global user.email 'hughparsonage@users.noreply.github.com'
+          git add -A && git commmit -m 'Update data via GHA' && git push
