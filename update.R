@@ -99,7 +99,14 @@ if (!isTRUE(all.equal(new_metadata, metadata_on_disk))) {
 }
 
 
-
+file_splitter <- function(series_id) {
+  series_id <- sub("^A", "", series_id)
+  # "A2529212V.tsv" -> "5/29/21/2V/A2529212V.tsv"
+  paste0(paste0(data.table::tstrsplit(series_id, split = "(?<=..)", perl = TRUE), collapse = "/"),
+         "/A",
+         series_id,
+         ".tsv")
+}
 
 LFI[, 
     fwrite(if (.BY[["unit"]] == "1") {
@@ -107,16 +114,17 @@ LFI[,
     } else {
       .SD
     }, 
-    file = provide.file(paste0("./data/series_id/", 
+    file = provide.file(paste0("./data/series_id/A", # keep A for clarity
                                # for git tree performance
-                               substr(.BY[["series_id"]], 1, 4),
-                               "/",
-                               .BY[["series_id"]], ".tsv")),
+                               file_splitter(.BY[["series_id"]]))),
     sep = "\t"),
     keyby = .(series_id, unit),
     .SDcols = c("date", "value")]
 
-
+n_files_by_dir <- function() {
+  Dirs <- list.dirs()
+  sapply(Dirs, function(x) length(dir(path = x)))
+}
 
 
 
