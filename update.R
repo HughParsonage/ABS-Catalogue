@@ -3,13 +3,17 @@ library(magrittr)
 library(data.table)
 library(hutilscpp)
 library(hutils)
+library(default)
+default(read_abs) <- list(check_local = FALSE, show_progress_bars = FALSE)
+
 
 if (!exists("WPI") || !exists("CPI") || !exists("LFI")) {
-  WPI_orig <- copy(WPI <- read_abs("6345.0", check_local = FALSE))
-  CPI_orig <- copy(CPI <- read_abs("6401.0", check_local = FALSE))
-  LFI_orig <- copy(LFI <- read_abs("6202.0", check_local = FALSE))
-  GDP_orig <- copy(GDP <- read_abs("5206.0", check_local = FALSE))
-  AWO_orig <- copy(AWO <- read_abs("6302.0", check_local = FALSE))
+  WPI_orig <- copy(WPI <- read_abs("6345.0"))
+  CPI_orig <- copy(CPI <- read_abs("6401.0"))
+  LFI_orig <- copy(LFI <- read_abs("6202.0"))
+  GDP_orig <- copy(GDP <- read_abs("5206.0"))
+  AWO_orig <- copy(AWO <- read_abs("6302.0"))
+  RES <- read_abs("6416.0") # Residential property prices
 }
 
 setDT(WPI)
@@ -17,11 +21,15 @@ setDT(CPI)
 setDT(LFI)
 setDT(GDP)
 setDT(AWO)
+setDT(RES)
 
 # Some series are duplicated, we only want one data file per series
 # The metadata will be slightly different -- have to cope with the first
-LFI <- rbindlist(list(LFI, CPI, WPI, GDP, AWO), use.names = TRUE)
+LFI <- rbindlist(list(LFI, CPI, WPI, GDP, AWO, RES), use.names = TRUE)
 setkey(LFI, series_id, date)
+if (grep("hugh", Sys.getenv("USERNAME"))) {
+  pre_unique_LFI <- copy(LFI)
+}
 LFI <- unique(LFI, by = c("series_id", "date"))
 
 
