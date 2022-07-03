@@ -27,7 +27,7 @@ setDT(RES)
 # The metadata will be slightly different -- have to cope with the first
 LFI <- rbindlist(list(LFI, CPI, WPI, GDP, AWO, RES), use.names = TRUE)
 setkey(LFI, series_id, date)
-if (grep("hugh", Sys.getenv("USERNAME"))) {
+if (length(grep("hugh", Sys.getenv("USERNAME")))) {
   pre_unique_LFI <- copy(LFI)
 }
 LFI <- unique(LFI, by = c("series_id", "date"))
