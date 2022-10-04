@@ -9,7 +9,7 @@ on:
 name: Weekly-update-CRON
 
 jobs:
-  R-CMD-check:
+  Update-Catalogue:
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2

@@ -4,16 +4,26 @@ library(data.table)
 library(hutilscpp)
 library(hutils)
 library(default)
+options(scipen = 99)
 default(read_abs) <- list(check_local = FALSE, show_progress_bars = FALSE)
 
+read_abs2 <- function(...) {
+  cat("===", as.character(Sys.time()), "===\n")
+  tryCatch(read_abs(...), 
+           error = function(e) {
+             # So that one bad URL doesn't ruin the whole
+             cat("Error", e$m, "\n")
+             return(data.table())
+           })
+}
 
 if (!exists("WPI") || !exists("CPI") || !exists("LFI")) {
-  WPI_orig <- copy(WPI <- read_abs("6345.0"))
-  CPI_orig <- copy(CPI <- read_abs("6401.0"))
-  LFI_orig <- copy(LFI <- read_abs("6202.0"))
-  GDP_orig <- copy(GDP <- read_abs("5206.0"))
-  AWO_orig <- copy(AWO <- read_abs("6302.0"))
-  RES <- read_abs("6416.0") # Residential property prices
+  WPI_orig <- copy(WPI <- read_abs2("6345.0"))
+  CPI_orig <- copy(CPI <- read_abs2("6401.0"))
+  LFI_orig <- copy(LFI <- read_abs2("6202.0"))
+  GDP_orig <- copy(GDP <- read_abs2("5206.0"))
+  AWO_orig <- copy(AWO <- read_abs2("6302.0"))
+  RES <- read_abs2("6416.0") # Residential property prices
 }
 
 setDT(WPI)
