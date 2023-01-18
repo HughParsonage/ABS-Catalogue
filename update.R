@@ -22,7 +22,10 @@ if (!exists("WPI") || !exists("CPI") || !exists("LFI")) {
   CPI_orig <- copy(CPI <- read_abs2("6401.0"))
   LFI_orig <- copy(LFI <- read_abs2("6202.0"))
   GDP_orig <- copy(GDP <- read_abs2("5206.0"))
-  AWO_orig <- copy(AWO <- read_abs2("6302.0"))
+  # "Latest release" not so
+  if (Sys.Date() >= as.Date("2023-02-24")) {
+    AWO_orig <- copy(AWO <- read_abs2("6302.0"))
+  }
   RES <- read_abs2("6416.0") # Residential property prices
 }
 
