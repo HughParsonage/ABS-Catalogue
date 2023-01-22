@@ -25,6 +25,8 @@ if (!exists("WPI") || !exists("CPI") || !exists("LFI")) {
   # "Latest release" not so
   if (Sys.Date() >= as.Date("2023-02-24")) {
     AWO_orig <- copy(AWO <- read_abs2("6302.0"))
+  } else {
+    AWO_orig <- AWO <- data.table()
   }
   RES <- read_abs2("6416.0") # Residential property prices
 }
