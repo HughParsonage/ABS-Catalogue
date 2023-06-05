@@ -20,6 +20,7 @@ read_abs2 <- function(...) {
 if (!exists("WPI") || !exists("CPI") || !exists("LFI")) {
   WPI_orig <- copy(WPI <- read_abs2("6345.0"))
   CPI_orig <- copy(CPI <- read_abs2("6401.0"))
+  CPM_orig <- copy(CPM <- read_abs2("6484.0"))
   LFI_orig <- copy(LFI <- read_abs2("6202.0"))
   GDP_orig <- copy(GDP <- read_abs2("5206.0"))
   # "Latest release" not so
@@ -33,6 +34,7 @@ if (!exists("WPI") || !exists("CPI") || !exists("LFI")) {
 
 setDT(WPI)
 setDT(CPI)
+setDT(CPM)
 setDT(LFI)
 setDT(GDP)
 setDT(AWO)
@@ -40,7 +42,7 @@ setDT(RES)
 
 # Some series are duplicated, we only want one data file per series
 # The metadata will be slightly different -- have to cope with the first
-LFI <- rbindlist(list(LFI, CPI, WPI, GDP, AWO, RES), use.names = TRUE)
+LFI <- rbindlist(list(LFI, CPI, CPM, WPI, GDP, AWO, RES), use.names = TRUE)
 setkey(LFI, series_id, date)
 if (length(grep("hugh", Sys.getenv("USERNAME")))) {
   pre_unique_LFI <- copy(LFI)
