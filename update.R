@@ -108,7 +108,19 @@ if (file.exists("metadata.tsv")) {
     }
   }
 }
-new_metadata <- unique(rbind(metadata_of_LFI, metadata_on_disk, use.names = TRUE))
+if (nrow(metadata_on_disk)) {
+  setorder(metadata_on_disk, series_id, maxDate)
+  metadata_on_disk <- unique(metadata_on_disk,
+                             by = "series_id",
+                             fromLast = TRUE)
+}
+
+new_metadata <- 
+  unique(rbindlist(list(metadata_of_LFI, metadata_on_disk),
+                   use.names = TRUE,
+                   fill = TRUE),
+         by = "series_id")
+
 if (!isTRUE(all.equal(new_metadata, metadata_on_disk))) {
   fwrite(new_metadata,
          "metadata.tsv", 
